@@ -1,20 +1,31 @@
-version: '3.8'
+version: '3.7'
 services:
   app: 
     build: .
-    container_name: film_assistant
+    container_name: backend
+
+    environment:
+      DB_USER: filmass
+      DB_HOST: pg_db
+      DB_PASSWORD: film_assistant
+      DB_NAME: film_assistant
 
     ports:
       - "8008:8000"
     command: bash -c "uvicorn app.main:app --host 0.0.0.0"
+
+    restart: always
   
-  db:
-    image:  postgres:13.3
+  pg_db:
+    image:  postgres:13
     ports:
-      - "5432"
+      - 5432:5432
     volumes:
       - ./data:/var/lib/postgresql/data
+
     environment:
-      POSTGRES_USER:  root
-      POSTGRES_PASSWORD:  root
-      POSTGRES_DB: employment_exchange
+      POSTGRES_USER: filmass
+      POSTGRES_DB: film_assistant
+      POSTGRES_PASSWORD: 316497258
+    
+    restart: always
