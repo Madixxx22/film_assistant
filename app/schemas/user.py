@@ -1,10 +1,13 @@
 from pydantic import BaseModel, EmailStr, validator
 
-class UserRegistationRequest(BaseModel):
+
+class UserBase(BaseModel):
     email: EmailStr
+    login: str
+
+class UserRegistationRequest(UserBase):
     password: str
     password_ver: str
 
-class UserCreate(BaseModel):
-    email: EmailStr
+class UserInDB(UserBase):
     hashed_password: str

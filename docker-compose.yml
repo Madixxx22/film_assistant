@@ -7,7 +7,7 @@ services:
     environment:
       DB_USER: filmass
       DB_HOST: pg_db
-      DB_PASSWORD: film_assistant
+      DB_PASSWORD: 316497258
       DB_NAME: film_assistant
 
     ports:
