@@ -63,4 +63,5 @@ venv.bak/
 .env
 .vscode
 
+pgadmin
 data

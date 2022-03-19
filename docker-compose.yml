@@ -4,11 +4,8 @@ services:
     build: .
     container_name: backend
 
-    environment:
-      DB_USER: filmass
-      DB_HOST: pg_db
-      DB_PASSWORD: 316497258
-      DB_NAME: film_assistant
+    env_file:
+      - .env
 
     ports:
       - "8008:8000"
@@ -22,13 +19,23 @@ services:
       - 5432:5432
     volumes:
       - data:/var/lib/postgresql/data
+    env_file:
+      - .env
 
-    environment:
-      POSTGRES_USER: filmass
-      POSTGRES_DB: film_assistant
-      POSTGRES_PASSWORD: 316497258
     
     restart: always
   
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - pg_db
+    ports:
+      - "5050:80"
+    env_file:
+      - .env
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin
+
+
 volumes: 
   data:
