@@ -16,3 +16,7 @@ class UserRegistationRequest(UserBase):
 
 class UserInDB(UserBase):
     hashed_password: str
+
+class Token(UserBase):
+    access_token: str
+    token_type: str
