@@ -1,3 +1,4 @@
+import datetime
 from pydantic import BaseModel, EmailStr, validator
 
 
@@ -17,6 +18,16 @@ class UserRegistationRequest(UserBase):
 class UserInDB(UserBase):
     hashed_password: str
 
-class Token(UserBase):
+class User(UserBase):
+    pass
+
+class UserInfoUpdate(UserBase):
+    last_name: str
+    first_name: str
+    
+class UserInfoResponce(UserInfoUpdate):
+    registered_date: datetime.datetime
+
+class Token(BaseModel):
     access_token: str
-    token_type: str
+    token_type: str = "bearer"
