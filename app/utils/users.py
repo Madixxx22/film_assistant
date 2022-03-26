@@ -1,8 +1,7 @@
 from datetime import datetime, timedelta
-from fastapi.security import OAuth2PasswordRequestForm
 
 from app.db.base import database
-from app.models.user import users, users_authentication
+from app.models.user import users, users_authentication, user_profile
 from app.core.security import create_access_token, get_hash_password, pwd_context
 from app.schemas.user import User, UserInDB, UserRegistationRequest
 
@@ -21,7 +20,7 @@ async def get_user_by_email(email: str):
 async def validate_password(password: str, hashed_password: str):
     return pwd_context.verify(password, hashed_password)
 
-async def create_user_token(user):
+async def create_user_token(user: User):
     auth_code=create_access_token(data = {"sub": user.login})
     query = (
         users_authentication.insert()
@@ -33,4 +32,8 @@ async def create_user_token(user):
 async def is_active(user: UserInDB):
     query = users_authentication.select(users_authentication.c.is_used).where(
         users_authentication.c.login == user.login)
+    return await database.fetch_one(query)
+
+async def create_user_info(user: User):
+    query = user_profile.insert().values(login=user.login, registered=datetime.now())
     return await database.fetch_one(query)
