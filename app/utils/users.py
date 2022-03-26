@@ -1,10 +1,18 @@
 from datetime import datetime, timedelta
+from jose import jwt
 
+from fastapi import Depends, HTTPException
+from app.core.config import ALGORITHM, SECRET_KEY
 from app.db.base import database
+from app.core.security import oauth2_scheme
 from app.models.user import users, users_authentication, user_profile
 from app.core.security import create_access_token, get_hash_password, pwd_context
-from app.schemas.user import User, UserInDB, UserRegistationRequest
+from app.schemas.user import TokenPayload, User, UserInDB, UserInfoUpdate, UserRegistationRequest
 
+
+async def get(id):
+    query = users_authentication.select().where(users_authentication.c.login == id)
+    return await database.fetch_one(query)
 
 async def create_user(user: UserRegistationRequest ):
     query = users.insert().values(
@@ -29,7 +37,7 @@ async def create_user_token(user: User):
     )
     return  await database.fetch_one(query)
 
-async def is_active(user: UserInDB):
+async def is_active(user: User):
     query = users_authentication.select(users_authentication.c.is_used).where(
         users_authentication.c.login == user.login)
     return await database.fetch_one(query)
@@ -37,3 +45,27 @@ async def is_active(user: UserInDB):
 async def create_user_info(user: User):
     query = user_profile.insert().values(login=user.login, registered=datetime.now())
     return await database.fetch_one(query)
+
+async def update_user_info():
+    pass
+
+async def get_current_user(token: str = Depends(oauth2_scheme)):
+    try:
+        payload = jwt.decode(
+            token, SECRET_KEY, algorithms=[ALGORITHM]
+        )
+        token_data = TokenPayload(**payload)
+    except:
+        raise HTTPException(
+            status_code=400,
+            detail="Could not validate credentials",
+        )
+    user = get(id=token_data.sub)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+async def get_current_active_user(current_user:UserInfoUpdate = Depends(get_current_user)):
+    if not is_active(current_user):
+        raise HTTPException(status_code = 400, detail="Inactive user")
+    return current_user

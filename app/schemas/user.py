@@ -31,3 +31,6 @@ class UserInfoResponce(UserInfoUpdate):
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
+
+class TokenPayload(Token):
+    sub: int | None = None
