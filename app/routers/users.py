@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from app.core.security import create_access_token
 
-from app.utils.users import create_user, create_user_info, get_current_active_user, get_user_by_email, is_active, validate_password, create_user_token
+from app.utils.users import create_user, create_user_info, get_current_active_user, get_user_by_email, is_active, update_access_token, validate_password, create_user_token
 from app.schemas.user import Token, UserInfoUpdate, UserRegistationRequest
 
 router = APIRouter()
@@ -29,7 +29,8 @@ async def login_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     elif not is_active(user):
         raise HTTPException(status_code = 400, detail="Inactive user")
 
-    return Token(access_token = create_access_token(data = {"sub": user.login}))
+    
+    return await update_access_token(user)
 
 @router.put("update_info_user")
 async def update_info_user(current_user:UserInfoUpdate =  Depends(get_current_active_user)):

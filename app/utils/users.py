@@ -69,3 +69,10 @@ async def get_current_active_user(current_user:UserInfoUpdate = Depends(get_curr
     if not is_active(current_user):
         raise HTTPException(status_code = 400, detail="Inactive user")
     return current_user
+
+async def update_access_token(user: User):
+    auth_code=create_access_token(data = {"sub": user.login})
+    query = users_authentication.update().where(
+        users_authentication.c.login == user.login).values(
+        auth_code=auth_code, generated_timestamp = datetime.now() + timedelta(weeks=2), is_used = True)
+    return await database.fetch_one(query)
