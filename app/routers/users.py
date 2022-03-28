@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.db.crud_user import user_crud
 from app.utils.users import get_current_active_user, validate_password
-from app.schemas.user import Token, UserInfoUpdate, UserProfileResponce, UserRegistationRequest
+from app.schemas.user import Token, UserProfileUpdate, UserProfileResponce, UserRegistationRequest, UsersAuth
 
 router = APIRouter()
 
@@ -22,21 +22,27 @@ async def register_user(user_reg: UserRegistationRequest):
 async def login_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     user = await user_crud.get_user_by_email(email = form_data.username)
     if not user:
+        user = await user_crud.get_user_by_login(login = form_data.username)
+        if not user:
+            raise HTTPException(status_code = 400, detail="Incorrect email or password")
+    if not await validate_password(form_data.password, user.hashed_password):
         raise HTTPException(status_code = 400, detail="Incorrect email or password")
-
-    if not validate_password(form_data.password, user.hashed_password):
-        raise HTTPException(status_code = 400, detail="Incorrect email or password")
-    elif not user_crud.is_active(user):
+    elif not await user_crud.is_active(user):
         raise HTTPException(status_code = 400, detail="Inactive user")
 
     
     return await user_crud.update_access_token(user)
 
 
-@router.get("/profile_user", responce_model = UserProfileResponce)
-async def profile_user():
-    pass
+@router.get("/profile_user/")
+async def profile_user(current_user: UsersAuth = Depends(get_current_active_user)):
+    profile = await user_crud.get_user_profile(login = current_user.login)
+
+    if not profile:
+        raise HTTPException(status_code = 400, detail="profile does not exist")
+
+    return profile
 
 @router.put("/profile_user/update_profile_user")
-async def update_profile_user(current_user:UserInfoUpdate =  Depends(get_current_active_user)):
+async def update_profile_user(current_user:UserProfileUpdate =  Depends(get_current_active_user)):
     pass

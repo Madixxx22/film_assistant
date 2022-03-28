@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from pydantic import EmailStr
 from app.core.security import create_access_token, get_hash_password
 
-from app.schemas.user import User, UserInDB, UserRegistationRequest, UsersAuth
+from app.schemas.user import User, UserInDB, UserProfileResponce, UserRegistationRequest, UsersAuth, Token
 from .base import database
 from app.models.user import users, users_authentication, user_profile
 
@@ -11,8 +11,16 @@ class UserCRUD():
         query = users.select().where(users.c.email == email)
         return await database.fetch_one(query)
     
-    async def get_user_by_login(self, login: str) -> UsersAuth:
+    async def get_user_by_login(self, login: str) -> UserInDB:
+        query = users.select().where(users.c.login == login)
+        return await database.fetch_one(query)
+
+    async def get_user_by_login_auth(self, login: str) -> UsersAuth:
         query = users_authentication.select().where(users_authentication.c.login == login)
+        return await database.fetch_one(query)
+    
+    async def get_user_profile(self, login: str) -> UserProfileResponce:
+        query = user_profile.select().where(user_profile.c.login == login)
         return await database.fetch_one(query)
     
     async def create_user(self, user: UserRegistationRequest):
@@ -45,6 +53,7 @@ class UserCRUD():
             users_authentication.c.login == user.login).values(
                 auth_code=auth_code, generated_timestamp = datetime.now() + timedelta(weeks=2)
             )
-        return await database.execute(query)
+        await database.execute(query)
+        return Token(access_token = auth_code)
 
 user_crud = UserCRUD()

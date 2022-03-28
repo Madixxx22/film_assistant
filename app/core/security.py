@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordBearer
 from .config import SECRET_KEY, ALGORITHM
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/log-in")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="log-in")
 
 def get_hash_password(password):
     return pwd_context.hash(password)

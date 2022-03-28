@@ -21,12 +21,12 @@ class UserInDB(UserBase):
 class User(UserBase):
     pass
 
-class UserProfilepdate(UserBase):
-    last_name: str
-    first_name: str
+class UserProfileUpdate(UserBase):
+    last_name: str = None
+    first_name: str = None
     
 class UserProfileResponce(UserProfileUpdate):
-    registered_date: datetime.datetime
+    registered_date: datetime.datetime = None
 
 class Token(BaseModel):
     access_token: str
@@ -40,5 +40,5 @@ class UsersAuth(BaseModel):
 
 
 
-class TokenPayload(Token):
-    sub: int | None = None
+class TokenPayload(BaseModel):
+    sub: str | None = None
