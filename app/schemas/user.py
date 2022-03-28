@@ -21,16 +21,24 @@ class UserInDB(UserBase):
 class User(UserBase):
     pass
 
-class UserInfoUpdate(UserBase):
+class UserProfilepdate(UserBase):
     last_name: str
     first_name: str
     
-class UserInfoResponce(UserInfoUpdate):
+class UserProfileResponce(UserProfileUpdate):
     registered_date: datetime.datetime
 
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
+
+class UsersAuth(BaseModel):
+    login: str
+    generated_timestamp: datetime.datetime
+    auth_code: str
+    is_used: bool
+
+
 
 class TokenPayload(Token):
     sub: int | None = None
