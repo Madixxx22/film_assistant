@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta
 from pydantic import EmailStr
-from app.core.security import create_access_token, get_hash_password
+import sqlalchemy
 
-from app.schemas.user import User, UserInDB, UserProfileResponce, UserRegistationRequest, UsersAuth, Token
+from app.core.security import create_access_token, get_hash_password
+from app.schemas.user import User, UserInDB, UserProfileResponce, UserProfileUpdate, UserRegistationRequest, UsersAuth, Token
 from .base import database
 from app.models.user import users, users_authentication, user_profile
 
@@ -20,7 +21,11 @@ class UserCRUD():
         return await database.fetch_one(query)
     
     async def get_user_profile(self, login: str) -> UserProfileResponce:
-        query = user_profile.select().where(user_profile.c.login == login)
+        query = (sqlalchemy.select(
+            [users.c.email, users.c.login, user_profile.c.last_name,
+            user_profile.c.first_name, user_profile.c.registered]
+            ).select_from(user_profile.join(users)).where(user_profile.c.login == login))
+    
         return await database.fetch_one(query)
     
     async def create_user(self, user: UserRegistationRequest):
@@ -55,5 +60,12 @@ class UserCRUD():
             )
         await database.execute(query)
         return Token(access_token = auth_code)
+
+    async def update_user_profile(self, last_name: str, first_name: str, current_user: User):
+        query = user_profile.update().where(
+            user_profile.c.login == current_user.login).values(
+                last_name = last_name, first_name = first_name
+            )
+        return await database.execute(query)
 
 user_crud = UserCRUD()

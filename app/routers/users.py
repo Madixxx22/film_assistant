@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.db.crud_user import user_crud
 from app.utils.users import get_current_active_user, validate_password
-from app.schemas.user import Token, UserProfileUpdate, UserProfileResponce, UserRegistationRequest, UsersAuth
+from app.schemas.user import Token, User, UserProfileUpdate, UserProfileResponce, UserRegistationRequest, UsersAuth
 
 router = APIRouter()
 
@@ -27,7 +27,7 @@ async def login_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
             raise HTTPException(status_code = 400, detail="Incorrect email or password")
     if not await validate_password(form_data.password, user.hashed_password):
         raise HTTPException(status_code = 400, detail="Incorrect email or password")
-    elif not await user_crud.is_active(user):
+    elif not user_crud.is_active(user):
         raise HTTPException(status_code = 400, detail="Inactive user")
 
     
@@ -40,9 +40,11 @@ async def profile_user(current_user: UsersAuth = Depends(get_current_active_user
 
     if not profile:
         raise HTTPException(status_code = 400, detail="profile does not exist")
+    if not user_crud.is_active(profile):
+        raise HTTPException(status_code = 400, detail="profile is not active")
 
     return profile
 
 @router.put("/profile_user/update_profile_user")
-async def update_profile_user(current_user:UserProfileUpdate =  Depends(get_current_active_user)):
-    pass
+async def update_profile_user(last_name: str, first_name: str, current_user:User =  Depends(get_current_active_user)):
+    return await user_crud.update_user_profile(last_name, first_name, current_user)
