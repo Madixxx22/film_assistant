@@ -19,6 +19,3 @@ async def startup():
 async def shutdown():
     await database.disconnect() 
 
-@app.get('/')
-async def test_app():
-    return {"Успех" : "Успешный!"}

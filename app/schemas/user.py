@@ -6,7 +6,7 @@ class UserBase(BaseModel):
     email: EmailStr
     login: str
 
-class UserRegistationRequest(UserBase):
+class Password(BaseModel):
     password: str
     password_verification: str
     @validator("password_verification")
@@ -14,6 +14,9 @@ class UserRegistationRequest(UserBase):
         if 'password' in values and v != values["password"]:
             raise ValueError("passwords don't match")
         return v
+
+class UserRegistationRequest(UserBase, Password):
+    pass
 
 class UserInDB(UserBase):
     hashed_password: str
@@ -26,7 +29,7 @@ class UserProfileUpdate(UserBase):
     first_name: str = None
     
 class UserProfileResponce(UserProfileUpdate):
-    registered_date: datetime.datetime = None
+    registered_date: datetime.date = None
 
 class Token(BaseModel):
     access_token: str
@@ -34,7 +37,7 @@ class Token(BaseModel):
 
 class UsersAuth(BaseModel):
     login: str
-    generated_timestamp: datetime.datetime
+    generated_timestamp: datetime.date
     auth_code: str
     is_used: bool
 

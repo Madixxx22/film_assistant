@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
+from pydantic import EmailStr
 from sqlalchemy.orm import Session
 
 from app.db.crud_user import user_crud
 from app.utils.users import get_current_active_user, validate_password
-from app.schemas.user import Token, User, UserProfileUpdate, UserProfileResponce, UserRegistationRequest, UsersAuth
+from app.schemas.user import Password, Token, User, UserProfileUpdate, UserProfileResponce, UserRegistationRequest, UsersAuth
 
 router = APIRouter()
 
@@ -47,4 +48,19 @@ async def profile_user(current_user: UsersAuth = Depends(get_current_active_user
 
 @router.put("/profile_user/update_profile_user")
 async def update_profile_user(last_name: str, first_name: str, current_user:User =  Depends(get_current_active_user)):
+    if not user_crud.is_active(current_user):
+        raise HTTPException(status_code = 400, detail="profile is not active")
     return await user_crud.update_user_profile(last_name, first_name, current_user)
+
+@router.post("/recover_password/{email_od_login}")
+async def resert_password(email_or_login: str, password: Password):
+    user = await user_crud.get_user_by_email(email_or_login)
+
+    if not user:
+        user = await user_crud.get_user_by_login(email_or_login)
+        if not user:
+            raise HTTPException(status_code = 404, detail="user does not found")
+
+    return await user_crud.recover_password(user, password)
+
+        

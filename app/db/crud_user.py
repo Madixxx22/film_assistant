@@ -3,7 +3,7 @@ from pydantic import EmailStr
 import sqlalchemy
 
 from app.core.security import create_access_token, get_hash_password
-from app.schemas.user import User, UserInDB, UserProfileResponce, UserProfileUpdate, UserRegistationRequest, UsersAuth, Token
+from app.schemas.user import Password, User, UserInDB, UserProfileResponce, UserProfileUpdate, UserRegistationRequest, UsersAuth, Token
 from .base import database
 from app.models.user import users, users_authentication, user_profile
 
@@ -66,6 +66,12 @@ class UserCRUD():
             user_profile.c.login == current_user.login).values(
                 last_name = last_name, first_name = first_name
             )
+        return await database.execute(query)
+
+    async def recover_password(self, user: UserInDB, password: Password):
+        query = users.update().where(
+            users.c.login == user.login).values(
+            hashed_password = get_hash_password(password.password))
         return await database.execute(query)
 
 user_crud = UserCRUD()
