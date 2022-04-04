@@ -3,7 +3,7 @@ from pydantic import EmailStr
 import sqlalchemy
 
 from app.core.security import create_access_token, get_hash_password
-from app.schemas.user import Password, User, UserInDB, UserProfileResponce, UserProfileUpdate, UserRegistationRequest, UsersAuth, Token
+from app.schemas.user import Password, User, UserInDB, UserProfileResponse, UserRegistationRequest, UsersAuth, UserRegistationRequest, UsersAuth, Token
 from .base import database
 from app.models.user import users, users_authentication, user_profile
 
@@ -20,7 +20,7 @@ class UserCRUD():
         query = users_authentication.select().where(users_authentication.c.login == login)
         return await database.fetch_one(query)
     
-    async def get_user_profile(self, login: str) -> UserProfileResponce:
+    async def get_user_profile(self, login: str) -> UserProfileResponse:
         query = (sqlalchemy.select(
             [users.c.email, users.c.login, user_profile.c.last_name,
             user_profile.c.first_name, user_profile.c.registered]

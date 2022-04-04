@@ -28,7 +28,7 @@ class UserProfileUpdate(UserBase):
     last_name: str = None
     first_name: str = None
     
-class UserProfileResponce(UserProfileUpdate):
+class UserProfileResponse(UserProfileUpdate):
     registered_date: datetime.date = None
 
 class Token(BaseModel):
