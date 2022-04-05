@@ -3,12 +3,16 @@ from pydantic import BaseModel, validator
 from app.core.config import GENRES
 
 class FilmBase(BaseModel):
-    name_film: str | None = ""
-    genres: list[str] | None= [""]
-    rating: float | None = None
+    name_film: str = ""
+    genres: list[str] = [""]
+
 
 class Film(FilmBase):
-    pass
+    rating: float | None = None
+
+class FilmFull(FilmBase):
+    rating_start: float = 0
+    rating_end: float = 10
 
 class FilmGenres(BaseModel):
     genres: list[str]
@@ -20,6 +24,5 @@ class FilmGenres(BaseModel):
             
         return genres
 
-class FilmRating(BaseModel):
-    rating_start: float
-    rating_end: float
+class FilmName(BaseModel):
+    name_film: str
