@@ -5,13 +5,17 @@ from app.core.config import GENRES
 class FilmBase(BaseModel):
     name_film: str | None = None
     genres: list[str] | None= None
-    rating: int | None = None
+    rating: float | None = None
 
-class FilmGenres(FilmBase):
+class Film(FilmBase):
+    pass
+
+class FilmGenres(BaseModel):
+    genres: list[str]
     @validator("genres")
     def genres_validate(cls, genres):
-        if genres in GENRES:
-            print(genres in GENRES)
-            print(genres not in GENRES)
-            raise ValueError("The specified genres are missing in the search")
+        for i in genres:
+            if i.lower() not in GENRES:
+                raise ValueError("The specified genres are missing in the search")
+            
         return genres

@@ -9,7 +9,6 @@ from app.core.security import pwd_context
 from app.schemas.user import TokenPayload, User, UserInDB, UserProfileUpdate, UserRegistationRequest, UsersAuth
 
 
-
 async def validate_password(password: str, hashed_password: str):
     return pwd_context.verify(password, hashed_password)
 
