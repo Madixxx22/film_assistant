@@ -9,7 +9,7 @@ from app.schemas.user import Password, Token, User, UserRegistationRequest, User
 
 router = APIRouter()
 
-@router.post("/sign-up")
+@router.post("/register")
 async def register_user(user_reg: UserRegistationRequest):
     try:
         result = await user_crud.create_user(user_reg)
@@ -35,7 +35,7 @@ async def login_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     return await user_crud.update_access_token(user)
 
 
-@router.get("/profile_user/")
+@router.get("/profile-user/")
 async def profile_user(current_user: UsersAuth = Depends(get_current_active_user)):
     profile = await user_crud.get_user_profile(login = current_user.login)
 
@@ -46,13 +46,13 @@ async def profile_user(current_user: UsersAuth = Depends(get_current_active_user
 
     return profile
 
-@router.put("/profile_user/update_profile_user")
+@router.put("/profile-user/update-profile-user")
 async def update_profile_user(last_name: str, first_name: str, current_user:User =  Depends(get_current_active_user)):
-    if not user_crud.is_active(current_user):
+    if not await user_crud.is_active(current_user):
         raise HTTPException(status_code = 400, detail="profile is not active")
     return await user_crud.update_user_profile(last_name, first_name, current_user)
 
-@router.post("/recover_password/{email_od_login}")
+@router.post("/recover-password/{email_od_login}")
 async def resert_password(email_or_login: str, password: Password):
     user = await user_crud.get_user_by_email(email_or_login)
 

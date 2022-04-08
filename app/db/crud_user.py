@@ -46,7 +46,7 @@ class UserCRUD():
         query = users_authentication.select(users_authentication.c.is_used).where(
             users_authentication.c.login == user.login
         )
-        return database.fetch_one(query)
+        return await database.fetch_one(query)
     
     async def create_user_profile(self, user: User):
         query = user_profile.insert().values(login=user.login, registered=datetime.now())

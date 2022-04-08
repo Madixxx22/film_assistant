@@ -13,5 +13,6 @@ async def search_film(film_info: FilmFull) -> list[Film]:
         data = data_json[i]
         if type(data) is list:
             for j in range(len(data)):
-                list_film.append(Film(name_film = data[j]["title"], genres = data[j]["genres"].split(), rating = data[j]["imDbRating"]))
+                list_film.append(Film(name_film = data[j]["title"], genres = data[j]["genres"].split(),
+                rating = data[j]["imDbRating"], img_link = data[j]["image"]))
     return list_film

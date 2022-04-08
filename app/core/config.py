@@ -1,4 +1,5 @@
 from os import environ
+from fastapi.templating import Jinja2Templates
 
 
 
@@ -13,6 +14,5 @@ GENRES = ["action", "adventure", "animation", "biography", "comedy", "crime", "d
             "drama", "family", "fantasy", "film-Noir", "game-Show", "history", "horror", "music",
             "musical", "mystery", "news", "reality-TV", "romance", "sci-Fi", "sport", "talk-Show",
             "thriller", "war", "western"]
-
-
 DATABASE_URL = (f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:5432/{DB_NAME}")
+templates = Jinja2Templates(directory="app/templates")

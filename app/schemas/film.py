@@ -9,6 +9,7 @@ class FilmBase(BaseModel):
 
 class Film(FilmBase):
     rating: float | None = None
+    img_link: str | None = None
 
 class FilmFull(FilmBase):
     rating_start: float = 0
