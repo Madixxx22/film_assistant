@@ -1,5 +1,5 @@
 import sqlalchemy
-from datetime import datetime
+from datetime import date
 
 from app.db.base import metadata
 
@@ -15,7 +15,7 @@ users_authentication = sqlalchemy.Table(
     "users_authentication",
     metadata,
     sqlalchemy.Column("login", sqlalchemy.ForeignKey("users.login"), primary_key=True),
-    sqlalchemy.Column("generated_timestamp", sqlalchemy.DateTime(), default=datetime.now),
+    sqlalchemy.Column("generated_timestamp", sqlalchemy.DateTime(), default=date.today),
     sqlalchemy.Column("auth_code",  sqlalchemy.String(), nullable=False),
     sqlalchemy.Column("is_used", sqlalchemy.Boolean(), default=False)
 )
@@ -26,5 +26,5 @@ user_profile = sqlalchemy.Table(
     sqlalchemy.Column("login", sqlalchemy.ForeignKey("users.login"), primary_key=True),
     sqlalchemy.Column("first_name", sqlalchemy.String()),
     sqlalchemy.Column("last_name", sqlalchemy.String()),
-    sqlalchemy.Column("registered", sqlalchemy.DateTime(), default=datetime.now)
+    sqlalchemy.Column("registered", sqlalchemy.DateTime(), default=date.today)
 )

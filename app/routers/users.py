@@ -28,7 +28,7 @@ async def login_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
             raise HTTPException(status_code = 400, detail="Incorrect email or password")
     if not await validate_password(form_data.password, user.hashed_password):
         raise HTTPException(status_code = 400, detail="Incorrect email or password")
-    elif not user_crud.is_active(user):
+    elif not await user_crud.is_active(user):
         raise HTTPException(status_code = 400, detail="Inactive user")
 
     
@@ -41,7 +41,7 @@ async def profile_user(current_user: UsersAuth = Depends(get_current_active_user
 
     if not profile:
         raise HTTPException(status_code = 400, detail="profile does not exist")
-    if not user_crud.is_active(profile):
+    if not await user_crud.is_active(profile):
         raise HTTPException(status_code = 400, detail="profile is not active")
 
     return profile

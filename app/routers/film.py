@@ -24,11 +24,23 @@ async def search_film_name(film_name: FilmName):
 async def search_film_full(film_info: FilmFull, current_user: User =  Depends(get_current_active_user)):
     if not await user_crud.is_active(current_user):
         raise HTTPException(status_code = 400, detail="profile is not active")
-    await film_crud.create_search_film(film_info, current_user)
-    return await search_film(film_info)
 
-@router.get("/search-film-history")
+    await film_crud.create_search_film(film_info, current_user)
+
+    id_search = await film_crud.get_id_search_film(current_user)
+    films_response = await search_film(film_info)
+    
+    await film_crud.create_film_history_by_search(id_search["id_search"], films_response)
+ 
+    return films_response
+
+@router.get("/history-search")
 async def search_film_history(current_user: User = Depends(get_current_active_user)):
     if not await user_crud.is_active(current_user):
         raise HTTPException(status_code = 400, detail="profile is not active")
     return await film_crud.get_history_search(current_user)
+
+
+@router.get("/history-search/film-history-by-search")
+async def film_history_by_search(id_search : int, current_user: User = Depends(get_current_active_user)):
+    return await film_crud.get_history_film_by_search(id_search)
