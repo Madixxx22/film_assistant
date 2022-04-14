@@ -27,7 +27,7 @@ search_film_history = sqlalchemy.Table(
 film_history_by_search = sqlalchemy.Table(
     "film_history_by_search",
     metadata,
-    sqlalchemy.Column("id_search_film", sqlalchemy.ForeignKey("search_film_history.id_search")),
+    sqlalchemy.Column("id_search_film", sqlalchemy.ForeignKey("search_film_history.id_search", ondelete="CASCADE")),
     sqlalchemy.Column("name_film", sqlalchemy.String()),
     sqlalchemy.Column("genres", sqlalchemy.ARRAY(sqlalchemy.String)),
     sqlalchemy.Column("rating", sqlalchemy.Float()),

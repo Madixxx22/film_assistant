@@ -43,7 +43,7 @@ class FilmCRUD():
                         genres = films[i].genres, rating = films[i].rating, img_link = films[i].img_link)
                 await database.execute(query)
 
-    async def add_film_selected(self, film: Film, login: str):
+    async def create_film_selected(self, film: Film, login: str):
         query = films_selected.insert().values(login = login, name_film = film.name_film,
                 genres = film.genres, rating = film.rating, img_link = film.img_link)
         
@@ -52,5 +52,12 @@ class FilmCRUD():
     async def delete_selected_film(self, id_film: int, login: str):
         query = films_selected.delete().where(films_selected.c.id_film == id_film, films_selected.c.login == login)
         return await database.execute(query)
+
+    async def delete_history_search(self, login: str):
+        query_search_history = search_film_history.delete().where(search_film_history.c.login == login)
+        
+
+       
+        return await database.execute(query_search_history)
 
 film_crud = FilmCRUD()
