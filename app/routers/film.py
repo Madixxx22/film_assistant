@@ -3,7 +3,7 @@ from fastapi.responses import HTMLResponse
 from app.db.crud_film import film_crud
 from app.db.crud_user import user_crud
 
-from app.schemas.film import FilmFull, FilmGenres, FilmName
+from app.schemas.film import Film, FilmFull, FilmGenres, FilmName
 from app.core.config import templates
 from app.schemas.user import User
 from app.utils.film import search_film
@@ -43,4 +43,26 @@ async def search_film_history(current_user: User = Depends(get_current_active_us
 
 @router.get("/history-search/film-history-by-search")
 async def film_history_by_search(id_search : int, current_user: User = Depends(get_current_active_user)):
+    if not await user_crud.is_active(current_user):
+        raise HTTPException(status_code = 400, detail="profile is not active")
     return await film_crud.get_history_film_by_search(id_search)
+
+@router.post("/add_film_selected")
+async def add_film_selected(film_select: Film, current_user: User =  Depends(get_current_active_user)):
+    if not await user_crud.is_active(current_user):
+        raise HTTPException(status_code=400, detail="profile is not active")
+    return await film_crud.add_film_selected(login = current_user.login, film = film_select)
+
+@router.get("/selected_films")
+async def view_selected_films(current_user: User =  Depends(get_current_active_user)):
+    if not await user_crud.is_active(current_user):
+        raise HTTPException(status_code = 400, detail="profile is not active")
+
+    return await film_crud.get_selected_films(current_user.login)
+
+@router.delete("/delete_selected_films")
+async def delete_selected_film(id_film: int, current_user: User =  Depends(get_current_active_user)):
+    if not await user_crud.is_active(current_user):
+        raise HTTPException(status_code = 400, detail="profile is not active")
+
+    return await film_crud.delete_selected_film(id_film = id_film, login = current_user.login)

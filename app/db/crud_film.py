@@ -1,8 +1,8 @@
 from re import L
 import sqlalchemy
 
-from app.models.film import search_film_history, film_history_by_search
-from app.schemas.film import FilmFull
+from app.models.film import search_film_history, film_history_by_search, films_selected
+from app.schemas.film import Film, FilmFull
 from app.schemas.user import User
 from .base import database
 
@@ -22,6 +22,10 @@ class FilmCRUD():
         query = film_history_by_search.select().where(film_history_by_search.c.id_search_film == id_search)
         return await database.fetch_all(query)
 
+    async def get_selected_films(self, login: str) -> list[Film]:
+        query = films_selected.select().where(films_selected.c.login == login)
+        return await database.fetch_all(query)
+
     async def create_search_film(self, film_search: FilmFull, current_user: User):
         query = search_film_history.insert().values(login = current_user.login, name_film = film_search.name_film,
                 genres = film_search.genres, rating_start = film_search.rating_start, rating_end = film_search.rating_end)
@@ -38,5 +42,15 @@ class FilmCRUD():
                 query = film_history_by_search.insert().values(id_search_film = id_search, name_film = films[i].name_film,
                         genres = films[i].genres, rating = films[i].rating, img_link = films[i].img_link)
                 await database.execute(query)
+
+    async def add_film_selected(self, film: Film, login: str):
+        query = films_selected.insert().values(login = login, name_film = film.name_film,
+                genres = film.genres, rating = film.rating, img_link = film.img_link)
+        
+        return await database.execute(query)
+
+    async def delete_selected_film(self, id_film: int, login: str):
+        query = films_selected.delete().where(films_selected.c.id_film == id_film, films_selected.c.login == login)
+        return await database.execute(query)
 
 film_crud = FilmCRUD()

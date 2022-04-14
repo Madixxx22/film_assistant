@@ -5,6 +5,7 @@ from app.db.base import metadata
 films_selected = sqlalchemy.Table(
     "films_selected",
     metadata,
+    sqlalchemy.Column("id_film", sqlalchemy.Integer(), primary_key=True),
     sqlalchemy.Column("login", sqlalchemy.ForeignKey("users.login")),
     sqlalchemy.Column("name_film", sqlalchemy.String()),
     sqlalchemy.Column("genres", sqlalchemy.ARRAY(sqlalchemy.String)),
