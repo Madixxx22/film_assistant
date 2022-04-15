@@ -7,7 +7,7 @@ from app.schemas import film
 from app.schemas.film import Film, FilmFull, FilmGenres, FilmName
 from app.core.config import templates
 from app.schemas.user import User
-from app.utils.film import search_film
+from app.utils.film import recommend, search_film
 from app.utils.users import get_current_active_user
 
 router = APIRouter()
@@ -74,3 +74,10 @@ async def delete_selected_film(id_film: int, current_user: User =  Depends(get_c
         raise HTTPException(status_code = 400, detail="profile is not active")
 
     return await film_crud.delete_selected_film(id_film = id_film, login = current_user.login)
+
+@router.get("/recommendations")
+async def recommendations(count_genres: int, current_user: User =  Depends(get_current_active_user)):
+    if not await user_crud.is_active(current_user):
+        raise HTTPException(status_code = 400, detail="profile is not active")
+    
+    return await recommend(count_genres, current_user.login)
