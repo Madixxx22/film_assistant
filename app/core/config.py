@@ -12,7 +12,7 @@ ALGORITHM = environ.get("ALGORITHM")
 API_KEY_IMDB = environ.get("API_KEY_IMDB")
 GENRES = ["action", "adventure", "animation", "biography", "comedy", "crime", "documentary",
             "drama", "family", "fantasy", "film-Noir", "game-Show", "history", "horror", "music",
-            "musical", "mystery", "news", "reality-TV", "romance", "sci-Fi", "sport", "talk-Show",
-            "thriller", "war", "western"]
+            "musical", "mystery", "news", "reality-TV", "romance", "sci-fi", "sport", "talk-Show",
+            "thriller", "war", "western", "short"]
 DATABASE_URL = (f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:5432/{DB_NAME}")
 templates = Jinja2Templates(directory="app/templates")
