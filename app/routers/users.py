@@ -7,14 +7,14 @@ from app.db.crud_user import user_crud
 from app.utils.users import get_current_active_user, validate_password
 from app.schemas.user import Password, Token, User, UserRegistationRequest, UsersAuth
 
-router = APIRouter()
+router = APIRouter(tags=["users"])
 
 @router.post("/register")
 async def register_user(user_reg: UserRegistationRequest):
     try:
         result = await user_crud.create_user(user_reg)
-        result_auth = await user_crud.create_user_token(user_reg)
-        result_info = await user_crud.create_user_profile(user_reg)
+        await user_crud.create_user_token(user_reg)
+        await user_crud.create_user_profile(user_reg)
     except:
         raise HTTPException(status_code = 400, detail="Such a user already exists")
     return result
@@ -35,7 +35,7 @@ async def login_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     return await user_crud.update_access_token(user)
 
 
-@router.get("/profile-user/")
+@router.get("/profile-user")
 async def profile_user(current_user: UsersAuth = Depends(get_current_active_user)):
     profile = await user_crud.get_user_profile(login = current_user.login)
 
@@ -52,7 +52,7 @@ async def update_profile_user(last_name: str, first_name: str, current_user:User
         raise HTTPException(status_code = 400, detail="profile is not active")
     return await user_crud.update_user_profile(last_name, first_name, current_user)
 
-@router.post("/recover-password/{email_od_login}")
+@router.post("/recover-password/{email_or_login}")
 async def resert_password(email_or_login: str, password: Password):
     user = await user_crud.get_user_by_email(email_or_login)
 
