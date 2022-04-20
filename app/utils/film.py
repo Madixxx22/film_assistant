@@ -3,8 +3,8 @@ import aiohttp
 import asyncio
 
 from app.db.crud_film import film_crud
-from app.schemas.film import Film, FilmFull
 from app.core.config import API_KEY_IMDB
+from app.schemas.film import Film, FilmFull
 
 async def search_film(film_info: FilmFull) -> list[Film]:
     url = f'https://imdb-api.com/API/AdvancedSearch/{API_KEY_IMDB}?title={film_info.name_film}&genres={",".join(film_info.genres)}&user_rating={",".join([str(film_info.rating_start), str(film_info.rating_end)])}'
@@ -13,17 +13,16 @@ async def search_film(film_info: FilmFull) -> list[Film]:
         async with session.get(url) as response:
             data_json = await response.json()
 
-    
     list_film = []
     for i in data_json:
         data = data_json[i]
         if type(data) is list:
             for j in range(len(data)):
-                list_film.append(Film(name_film = data[j]["title"], genres = data[j]["genres"].replace(',', '').split(),
+                list_film.append(Film(name_film = data[j]["title"], genres = data[j]["genres"].replace(",", "").split(),
                 rating = data[j]["imDbRating"], img_link = data[j]["image"]))
     return list_film
 
-async def recommend(count_genres: int, login: str):
+async def recommend(count_genres: int, login: str) -> list[Film]:
     selected_films = await film_crud.get_selected_films(login)
     dict_genres = {}
 
@@ -47,7 +46,7 @@ async def recommend(count_genres: int, login: str):
             list_genres_query.append(list(sorted_dict_genres.keys())[i])
     else:
         for i in range(len(list(sorted_dict_genres.keys()))):
-           list_genres_query.append(list(sorted_dict_genres.keys())[i]) 
+           list_genres_query.append(list(sorted_dict_genres.keys())[i])
     request_rec = FilmFull(genres = list_genres_query)
 
     return await search_film(request_rec)

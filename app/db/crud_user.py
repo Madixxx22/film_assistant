@@ -1,13 +1,14 @@
-from datetime import datetime, timedelta
-from pydantic import EmailStr
 import sqlalchemy
+from pydantic import EmailStr
+from datetime import datetime, timedelta, date
 
-from app.core.security import create_access_token, get_hash_password
-from app.schemas.user import Password, User, UserInDB, UserProfileResponse, UserRegistationRequest, UsersAuth, UserRegistationRequest, UsersAuth, Token
 from .base import database
+from app.core.security import create_access_token, get_hash_password
 from app.models.user import users, users_authentication, user_profile
+from app.schemas.user import Password, User, UserInDB, UserProfileResponse, UserRegistationRequest, UsersAuth, UserRegistationRequest, UsersAuth, Token
 
 class UserCRUD():
+
     async def get_user_by_email(self, email: EmailStr) -> UserInDB:
         query = users.select().where(users.c.email == email)
         return await database.fetch_one(query)
@@ -25,7 +26,6 @@ class UserCRUD():
             [users.c.email, users.c.login, user_profile.c.last_name,
             user_profile.c.first_name, user_profile.c.registered]
             ).select_from(user_profile.join(users)).where(user_profile.c.login == login))
-    
         return await database.fetch_one(query)
     
     async def create_user(self, user: UserRegistationRequest):
@@ -40,16 +40,16 @@ class UserCRUD():
             login=user.login, generated_timestamp = datetime.now() + timedelta(weeks=2),
             auth_code=auth_code, is_used = True
         )
-        return await database.execute(query)
+        await database.execute(query)
     
-    async def is_active(self, user: User):
+    async def is_active(self, user: User) -> bool:
         query = users_authentication.select(users_authentication.c.is_used).where(
             users_authentication.c.login == user.login
         )
         return await database.fetch_one(query)
     
     async def create_user_profile(self, user: User):
-        query = user_profile.insert().values(login=user.login, registered=datetime.now())
+        query = user_profile.insert().values(login=user.login, registered=date.today())
         return await database.execute(query)
     
     async def update_access_token(self, user: User):
@@ -72,6 +72,10 @@ class UserCRUD():
         query = users.update().where(
             users.c.login == user.login).values(
             hashed_password = get_hash_password(password.password))
+        return await database.execute(query)
+
+    async def delete_user(self, user):
+        query = users.delete().where(users.c.login == user.login)
         return await database.execute(query)
 
 user_crud = UserCRUD()

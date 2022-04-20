@@ -12,7 +12,6 @@ class FilmBase(BaseModel):
                 raise ValueError("The specified genres are missing in the search") 
         return genres
 
-
 class Film(FilmBase):
     rating: float | None = None
     img_link: str | None = None
@@ -20,3 +19,6 @@ class Film(FilmBase):
 class FilmFull(FilmBase):
     rating_start: float = 0
     rating_end: float = 10
+
+class FilmHistory(Film):
+    id_search_film: int

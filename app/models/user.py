@@ -14,7 +14,7 @@ users = sqlalchemy.Table(
 users_authentication = sqlalchemy.Table(
     "users_authentication",
     metadata,
-    sqlalchemy.Column("login", sqlalchemy.ForeignKey("users.login"), primary_key=True),
+    sqlalchemy.Column("login", sqlalchemy.ForeignKey("users.login", ondelete="CASCADE"), primary_key=True),
     sqlalchemy.Column("generated_timestamp", sqlalchemy.DateTime(), default=date.today),
     sqlalchemy.Column("auth_code",  sqlalchemy.String(), nullable=False),
     sqlalchemy.Column("is_used", sqlalchemy.Boolean(), default=False)
@@ -23,8 +23,8 @@ users_authentication = sqlalchemy.Table(
 user_profile = sqlalchemy.Table(
     "user_profile",
     metadata,
-    sqlalchemy.Column("login", sqlalchemy.ForeignKey("users.login"), primary_key=True),
+    sqlalchemy.Column("login", sqlalchemy.ForeignKey("users.login", ondelete="CASCADE"), primary_key=True),
     sqlalchemy.Column("first_name", sqlalchemy.String()),
     sqlalchemy.Column("last_name", sqlalchemy.String()),
-    sqlalchemy.Column("registered", sqlalchemy.DateTime(), default=date.today)
+    sqlalchemy.Column("registered", sqlalchemy.DateTime(), default=date.today())
 )

@@ -1,6 +1,6 @@
+from databases import Database
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.ext.declarative import declarative_base
-from databases import Database
 
 from app.core.config import DATABASE_URL
 

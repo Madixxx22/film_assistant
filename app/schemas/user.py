@@ -11,7 +11,7 @@ class Password(BaseModel):
     password_verification: str
     @validator("password_verification")
     def password_match(cls, v, values):
-        if 'password' in values and v != values["password"]:
+        if "password" in values and v != values["password"]:
             raise ValueError("passwords don't match")
         return v
 
@@ -29,7 +29,7 @@ class UserProfileUpdate(UserBase):
     first_name: str = None
     
 class UserProfileResponse(UserProfileUpdate):
-    registered_date: datetime.date = None
+    registered: datetime.date
 
 class Token(BaseModel):
     access_token: str
