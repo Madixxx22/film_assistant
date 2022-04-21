@@ -1,11 +1,9 @@
-import uvicorn
-from fastapi import Depends, FastAPI
-from sqlalchemy.orm import Session
+from fastapi import FastAPI
 
-from app.db.base import database
-from app.routers import users, film
-from app.db.base import metadata, engine
-from app.core.config import DESCRIPTION_APP
+from backend.app.db.base import database
+from backend.app.routers import users, film
+from backend.app.db.base import metadata, engine
+from backend.app.core.config import DESCRIPTION_APP
 
 
 app = FastAPI(title="FilmAssistantApp", description=DESCRIPTION_APP, version="1.0.0")

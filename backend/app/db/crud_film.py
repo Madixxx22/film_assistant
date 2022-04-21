@@ -2,9 +2,9 @@ from re import L
 import sqlalchemy
 
 from .base import database
-from app.schemas.user import User
-from app.schemas.film import Film, FilmFull, FilmHistory
-from app.models.film import search_film_history, film_history_by_search, films_selected
+from backend.app.schemas.user import User
+from backend.app.schemas.film import Film, FilmFull, FilmHistory
+from backend.app.models.film import search_film_history, film_history_by_search, films_selected
 
 
 class FilmCRUD():

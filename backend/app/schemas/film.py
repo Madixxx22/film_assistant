@@ -1,6 +1,6 @@
 from pydantic import BaseModel, validator
 
-from app.core.config import GENRES
+from backend.app.core.config import GENRES
 
 class FilmBase(BaseModel):
     name_film: str = ""

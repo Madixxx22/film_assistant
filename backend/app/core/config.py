@@ -1,5 +1,4 @@
 from os import environ
-from fastapi.templating import Jinja2Templates
 
 
 

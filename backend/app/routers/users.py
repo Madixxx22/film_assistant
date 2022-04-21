@@ -1,9 +1,9 @@
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from app.db.crud_user import user_crud
-from app.utils.users import get_current_active_user, validate_password
-from app.schemas.user import Password, Token, User, UserRegistationRequest, UsersAuth, UserProfileResponse
+from backend.app.db.crud_user import user_crud
+from backend.app.utils.users import get_current_active_user, validate_password
+from backend.app.schemas.user import Password, Token, User, UserRegistationRequest, UsersAuth, UserProfileResponse
 
 router = APIRouter(tags=["users"])
 

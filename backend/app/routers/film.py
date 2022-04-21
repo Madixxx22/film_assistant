@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from app.schemas.user import User
-from app.db.crud_film import film_crud
-from app.db.crud_user import user_crud
-from app.schemas.film import Film, FilmFull, FilmHistory
-from app.utils.film import recommend, search_film
-from app.utils.users import get_current_active_user
+from backend.app.schemas.user import User
+from backend.app.db.crud_film import film_crud
+from backend.app.db.crud_user import user_crud
+from backend.app.schemas.film import Film, FilmFull, FilmHistory
+from backend.app.utils.film import recommend, search_film
+from backend.app.utils.users import get_current_active_user
 
 router = APIRouter(tags=["film"])
 

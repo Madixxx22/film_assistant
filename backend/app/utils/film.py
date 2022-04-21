@@ -2,9 +2,9 @@ import requests
 import aiohttp
 import asyncio
 
-from app.db.crud_film import film_crud
-from app.core.config import API_KEY_IMDB
-from app.schemas.film import Film, FilmFull
+from backend.app.db.crud_film import film_crud
+from backend.app.core.config import API_KEY_IMDB
+from backend.app.schemas.film import Film, FilmFull
 
 async def search_film(film_info: FilmFull) -> list[Film]:
     url = f'https://imdb-api.com/API/AdvancedSearch/{API_KEY_IMDB}?title={film_info.name_film}&genres={",".join(film_info.genres)}&user_rating={",".join([str(film_info.rating_start), str(film_info.rating_end)])}'
