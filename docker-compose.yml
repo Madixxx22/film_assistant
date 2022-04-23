@@ -3,13 +3,19 @@ services:
   app: 
     build: ./backend
     container_name: backend
+    volumes:
+      - type: bind
+        source: ./backend/migrations/versions
+        target: /code/backend/migrations/versions
+        volume:
+          nocopy: true
+      
 
     env_file:
       - .env
-
     ports:
       - "8008:8000"
-    command: bash -c "uvicorn backend.app.main:app --host 0.0.0.0"
+    command: bash -c "uvicorn app.main:app --host 0.0.0.0"
 
     restart: always
   

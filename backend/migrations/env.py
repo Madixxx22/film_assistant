@@ -1,16 +1,14 @@
 import os
 import sys
-from __future__ import with_statement
 from logging.config import fileConfig
 from os import environ
 from sqlalchemy import engine_from_config, pool
 
 from alembic import context
 
-sys.path.append(os.getcwd())
-
-from db.base import Base
-
+from app.db.base import Base
+from app.models.user import users, users_authentication, user_profile
+from app.models.film import films_selected, search_film_history, film_history_by_search
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -23,6 +21,7 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
+
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
@@ -55,7 +54,7 @@ def run_migrations_offline():
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
-        compare_type=True
+        dialect_opts={"paramstyle": "named"},
     )
 
     with context.begin_transaction():

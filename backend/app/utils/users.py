@@ -1,11 +1,11 @@
 from jose import jwt
 from fastapi import Depends, HTTPException
 
-from backend.app.core.config import ALGORITHM, SECRET_KEY
-from backend.app.core.security import oauth2_scheme
-from backend.app.db.crud_user import user_crud
-from backend.app.core.security import pwd_context
-from backend.app.schemas.user import TokenPayload, User, UserInDB, UserProfileUpdate, UserRegistationRequest, UsersAuth
+from app.core.config import ALGORITHM, SECRET_KEY
+from app.core.security import oauth2_scheme
+from app.db.crud_user import user_crud
+from app.core.security import pwd_context
+from app.schemas.user import TokenPayload, User, UserInDB, UserProfileUpdate, UserRegistationRequest, UsersAuth
 
 
 async def validate_password(password: str, hashed_password: str):

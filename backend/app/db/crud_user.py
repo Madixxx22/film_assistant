@@ -3,9 +3,9 @@ from pydantic import EmailStr
 from datetime import datetime, timedelta, date
 
 from .base import database
-from backend.app.core.security import create_access_token, get_hash_password
-from backend.app.models.user import users, users_authentication, user_profile
-from backend.app.schemas.user import Password, User, UserInDB, UserProfileResponse, UserRegistationRequest, UsersAuth, UserRegistationRequest, UsersAuth, Token
+from app.core.security import create_access_token, get_hash_password
+from app.models.user import users, users_authentication, user_profile
+from app.schemas.user import Password, User, UserInDB, UserProfileResponse, UserRegistationRequest, UsersAuth, UserRegistationRequest, UsersAuth, Token
 
 class UserCRUD():
 

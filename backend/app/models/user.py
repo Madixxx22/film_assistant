@@ -1,7 +1,7 @@
 import sqlalchemy
 from datetime import date
 
-from backend.app.db.base import metadata
+from app.db.base import metadata
 
 users = sqlalchemy.Table(
     "users",
