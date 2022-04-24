@@ -1,23 +1,5 @@
 version: '3.7'
 services:
-  app: 
-    build: ./backend
-    container_name: backend
-    volumes:
-      - type: bind
-        source: ./backend/migrations/versions
-        target: /code/backend/migrations/versions
-        volume:
-          nocopy: true
-      
-
-    env_file:
-      - .env
-    ports:
-      - "8008:8000"
-    command: bash -c "uvicorn app.main:app --host 0.0.0.0"
-
-    restart: always
   
   pg_db:
     image:  postgres:13
@@ -28,9 +10,32 @@ services:
     env_file:
       - .env
 
+    restart: always
+
+
+  app: 
+    build: ./backend
+    container_name: backend 
+       
+    depends_on: 
+      - pg_db
+
+    volumes:
+      - type: bind
+        source: ./backend/migrations/versions
+        target: /code/backend/migrations/versions
+        volume:
+          nocopy: true
+      
+    env_file:
+      - .env
+    ports:
+      - "8008:8000"
+    command: bash -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0"
     
     restart: always
   
+
   pgadmin:
     image: dpage/pgadmin4
     depends_on:

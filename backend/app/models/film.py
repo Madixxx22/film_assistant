@@ -1,10 +1,10 @@
 import sqlalchemy
 
-from app.db.base import metadata
+from app.db.base import metadata, Base
 
 films_selected = sqlalchemy.Table(
     "films_selected",
-    metadata,
+    Base.metadata,
     sqlalchemy.Column("id_film", sqlalchemy.Integer(), primary_key=True),
     sqlalchemy.Column("login", sqlalchemy.ForeignKey("users.login", ondelete="CASCADE")),
     sqlalchemy.Column("name_film", sqlalchemy.String()),
@@ -15,7 +15,7 @@ films_selected = sqlalchemy.Table(
 
 search_film_history = sqlalchemy.Table(
     "search_film_history",
-    metadata,
+    Base.metadata,
     sqlalchemy.Column("id_search", sqlalchemy.Integer(), primary_key=True),
     sqlalchemy.Column("login", sqlalchemy.ForeignKey("users.login", ondelete="CASCADE")),
     sqlalchemy.Column("name_film", sqlalchemy.String()),
@@ -26,7 +26,7 @@ search_film_history = sqlalchemy.Table(
 
 film_history_by_search = sqlalchemy.Table(
     "film_history_by_search",
-    metadata,
+    Base.metadata,
     sqlalchemy.Column("id_search_film", sqlalchemy.ForeignKey("search_film_history.id_search", ondelete="CASCADE")),
     sqlalchemy.Column("name_film", sqlalchemy.String()),
     sqlalchemy.Column("genres", sqlalchemy.ARRAY(sqlalchemy.String)),

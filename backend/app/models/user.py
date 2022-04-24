@@ -1,11 +1,11 @@
 import sqlalchemy
 from datetime import date
 
-from app.db.base import metadata
+from app.db.base import metadata, Base
 
 users = sqlalchemy.Table(
     "users",
-    metadata,
+    Base.metadata,
     sqlalchemy.Column("login", sqlalchemy.String(), primary_key=True),
     sqlalchemy.Column("email", sqlalchemy.String(), unique=True, nullable=False),
     sqlalchemy.Column("hashed_password", sqlalchemy.String(), nullable=False),
@@ -13,7 +13,7 @@ users = sqlalchemy.Table(
 
 users_authentication = sqlalchemy.Table(
     "users_authentication",
-    metadata,
+    Base.metadata,
     sqlalchemy.Column("login", sqlalchemy.ForeignKey("users.login", ondelete="CASCADE"), primary_key=True),
     sqlalchemy.Column("generated_timestamp", sqlalchemy.DateTime(), default=date.today),
     sqlalchemy.Column("auth_code",  sqlalchemy.String(), nullable=False),
@@ -22,7 +22,7 @@ users_authentication = sqlalchemy.Table(
 
 user_profile = sqlalchemy.Table(
     "user_profile",
-    metadata,
+    Base.metadata,
     sqlalchemy.Column("login", sqlalchemy.ForeignKey("users.login", ondelete="CASCADE"), primary_key=True),
     sqlalchemy.Column("first_name", sqlalchemy.String()),
     sqlalchemy.Column("last_name", sqlalchemy.String()),

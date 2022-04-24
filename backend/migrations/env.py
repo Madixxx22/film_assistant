@@ -6,7 +6,7 @@ from sqlalchemy import engine_from_config, pool
 
 from alembic import context
 
-from app.db.base import Base
+from app.db.base import Base, metadata
 from app.models.user import users, users_authentication, user_profile
 from app.models.film import films_selected, search_film_history, film_history_by_search
 # this is the Alembic Config object, which provides
