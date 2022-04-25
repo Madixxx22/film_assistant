@@ -42,6 +42,5 @@ class UsersAuth(BaseModel):
     is_used: bool
 
 
-
 class TokenPayload(BaseModel):
     sub: str | None = None

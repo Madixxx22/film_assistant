@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, date
 from .base import database
 from app.core.security import create_access_token, get_hash_password
 from app.models.user import users, users_authentication, user_profile
-from app.schemas.user import Password, User, UserInDB, UserProfileResponse, UserRegistationRequest, UsersAuth, UserRegistationRequest, UsersAuth, Token
+from app.schemas.user import Password, User, UserInDB, UserProfileResponse, UserRegistationRequest, UsersAuth, UserRegistationRequest, Token
 
 class UserCRUD():
 
@@ -28,11 +28,13 @@ class UserCRUD():
             ).select_from(user_profile.join(users)).where(user_profile.c.login == login))
         return await database.fetch_one(query)
     
-    async def create_user(self, user: UserRegistationRequest):
+    async def create_user(self, user: UserRegistationRequest) -> UserInDB:
+        hashed_password=get_hash_password(user.password)
         query = users.insert().values(
-            login=user.login, email=user.email, hashed_password=get_hash_password(user.password)
+            login=user.login, email=user.email, hashed_password=hashed_password
         )
-        return await database.execute(query)
+        await database.execute(query)
+        return UserInDB(login = user.login, email = user.email, hashed_password = hashed_password)
 
     async def create_user_token(self, user: User):
         auth_code = create_access_token(data = {"sub": user.login})

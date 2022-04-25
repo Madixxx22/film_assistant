@@ -1,14 +1,10 @@
-import os
-import sys
 from logging.config import fileConfig
 from os import environ
 from sqlalchemy import engine_from_config, pool
 
 from alembic import context
 
-from app.db.base import Base, metadata
-from app.models.user import users, users_authentication, user_profile
-from app.models.film import films_selected, search_film_history, film_history_by_search
+from app.db.base import Base
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config

@@ -1,6 +1,4 @@
-import requests
 import aiohttp
-import asyncio
 
 from app.db.crud_film import film_crud
 from app.core.config import API_KEY_IMDB

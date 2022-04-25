@@ -1,6 +1,6 @@
 import sqlalchemy
 
-from app.db.base import metadata, Base
+from app.db.base import Base
 
 films_selected = sqlalchemy.Table(
     "films_selected",
