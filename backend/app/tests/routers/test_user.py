@@ -1,9 +1,6 @@
-import pytest
-import asyncio
 from fastapi.testclient import TestClient
 
 from app.main import app
-from app.db.crud_user import user_crud
 
 def test_register_done():
     request_data = {

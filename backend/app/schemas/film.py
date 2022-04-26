@@ -16,7 +16,7 @@ class Film(FilmBase):
     rating: float | None = None
     img_link: str | None = None
 
-class FilmFull(FilmBase):
+class FilmSearch(FilmBase):
     rating_start: float = 0
     rating_end: float = 10
 

@@ -2,9 +2,9 @@ import aiohttp
 
 from app.db.crud_film import film_crud
 from app.core.config import API_KEY_IMDB
-from app.schemas.film import Film, FilmFull
+from app.schemas.film import Film, FilmSearch
 
-async def search_film(film_info: FilmFull) -> list[Film]:
+async def search_film(film_info: FilmSearch) -> list[Film]:
     url = f'https://imdb-api.com/API/AdvancedSearch/{API_KEY_IMDB}?title={film_info.name_film}&genres={",".join(film_info.genres)}&user_rating={",".join([str(film_info.rating_start), str(film_info.rating_end)])}'
 
     async with aiohttp.ClientSession() as session:
@@ -45,6 +45,6 @@ async def recommend(count_genres: int, login: str) -> list[Film]:
     else:
         for i in range(len(list(sorted_dict_genres.keys()))):
            list_genres_query.append(list(sorted_dict_genres.keys())[i])
-    request_rec = FilmFull(genres = list_genres_query)
+    request_rec = FilmSearch(genres = list_genres_query)
 
     return await search_film(request_rec)
