@@ -1,14 +1,15 @@
 from fastapi.security import OAuth2PasswordRequestForm
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Body, Depends, HTTPException, status
 
 from app.db.crud_user import user_crud
+from app.core.data_for_openapi import ExampleSchemes
 from app.utils.users import get_current_active_user, validate_password
 from app.schemas.user import Password, Token, User, UserRegistationRequest, UsersAuth, UserProfileResponse
 
 router = APIRouter(tags=["users"])
 
 @router.post("/register", status_code = status.HTTP_201_CREATED)
-async def register_user(user_reg: UserRegistationRequest):
+async def register_user(user_reg: UserRegistationRequest = Body(..., example=ExampleSchemes.register)):
     """ 
     Registration of users in the application: 
 
@@ -56,7 +57,12 @@ async def login_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     return await user_crud.update_access_token(user)
 
 
-@router.get("/profile-user", response_model = UserProfileResponse, status_code = status.HTTP_200_OK)
+@router.get("/profile-user", response_model = UserProfileResponse, status_code = status.HTTP_200_OK, responses =  {200: { 
+ "description": "Item requested by ID", 
+ "content": { 
+ "application/json": { 
+ "example": ExampleSchemes.profile_user 
+ }}}})
 async def profile_user(current_user: UsersAuth = Depends(get_current_active_user)):
     """ 
     Viewing user information (only for an authorized user): 

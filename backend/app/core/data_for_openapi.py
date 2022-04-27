@@ -36,3 +36,105 @@ TAGS_METADATA = [
     },
 ]
 
+class ExampleSchemes():
+    register = {
+            "password": "123456789",
+            "password_verification": "123456789",
+            "email": "JoJo@example.com",
+            "login": "Jostar"
+    }
+    
+    film =   {
+        "name_film": "Kingsman: The Secret Service",
+        "genres": [
+            "Action",
+            "Adventure",
+            "Comedy"
+        ],
+        "rating": 7.7,
+        "img_link": "https://imdb-api.com/images/original/MV5BYTM3ZTllNzItNTNmOS00NzJiLTg1MWMtMjMxNDc0NmJhODU5XkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_Ratio0.6837_AL_.jpg"
+  }
+
+    film_response =   [{
+        "name_film": "Kingsman: The Secret Service",
+        "genres": [
+            "Action",
+            "Adventure",
+            "Comedy"
+        ],
+        "rating": 7.7,
+        "img_link": "https://imdb-api.com/images/original/MV5BYTM3ZTllNzItNTNmOS00NzJiLTg1MWMtMjMxNDc0NmJhODU5XkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_Ratio0.6837_AL_.jpg"
+    },
+    {
+        "name_film": "Kingsman: The Golden Circle",
+        "genres": [
+            "Action",
+            "Adventure",
+            "Comedy"
+        ],
+        "rating": 6.7,
+        "img_link": "https://imdb-api.com/images/original/MV5BMjQ3OTgzMzY4NF5BMl5BanBnXkFtZTgwOTc4OTQyMzI@._V1_Ratio0.6837_AL_.jpg"
+    } ]
+
+    film_response_with_id =   [{
+        "name_film": "Kingsman: The Secret Service",
+        "genres": [
+            "Action",
+            "Adventure",
+            "Comedy"
+        ],
+        "rating": 7.7,
+        "img_link": "https://imdb-api.com/images/original/MV5BYTM3ZTllNzItNTNmOS00NzJiLTg1MWMtMjMxNDc0NmJhODU5XkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_Ratio0.6837_AL_.jpg",
+        "id_search_film": 1
+    },
+    {
+        "name_film": "Kingsman: The Golden Circle",
+        "genres": [
+            "Action",
+            "Adventure",
+            "Comedy"
+        ],
+        "rating": 6.7,
+        "img_link": "https://imdb-api.com/images/original/MV5BMjQ3OTgzMzY4NF5BMl5BanBnXkFtZTgwOTc4OTQyMzI@._V1_Ratio0.6837_AL_.jpg",
+        "id_search_film": 2
+    } ]
+
+    film_search = {
+        "name_film": "Kingsman",
+        "genres": [
+            "action", "comedy"
+        ],
+        "rating_start": 5.7,
+        "rating_end": 8
+    }
+
+    search_film_request = [
+    {
+        "id_search": 1,
+        "login": "Jostar",
+        "name_film": "Kingsman",
+        "genres": [
+            "action",
+            "comedy"
+        ],
+        "rating_start": 5.7,
+        "rating_end": 8
+    },
+    {
+        "id_search": 2,
+        "login": "Jostar",
+        "name_film": "Spider",
+        "genres": [
+            "adventure"
+        ],
+        "rating_start": 5,
+        "rating_end": 9.6
+    }]
+
+    profile_user = {
+            "email": "JoJo@example.com",
+            "login": "Jostar",
+            "last_name": "Joseph",
+            "first_name": "Jostar",
+            "registered": "2022-04-27"
+    }
