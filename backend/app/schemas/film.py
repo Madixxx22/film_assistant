@@ -9,7 +9,9 @@ class FilmBase(BaseModel):
     def genres_validate(cls, genres):
         for i in genres:
             if i.lower() not in GENRES:
-                raise ValueError("The specified genres are missing in the search") 
+                raise ValueError("The specified genres are missing in the search")
+            elif genres == []:
+                return genres 
         return genres
 
 class Film(FilmBase):

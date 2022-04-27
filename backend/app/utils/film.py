@@ -5,7 +5,7 @@ from app.core.config import API_KEY_IMDB
 from app.schemas.film import Film, FilmSearch
 
 async def search_film(film_info: FilmSearch) -> list[Film]:
-    url = f'https://imdb-api.com/API/AdvancedSearch/{API_KEY_IMDB}?title={film_info.name_film}&genres={",".join(film_info.genres)}&user_rating={",".join([str(film_info.rating_start), str(film_info.rating_end)])}'
+    url = f'https://imdb-api.com/API/AdvancedSearch/{API_KEY_IMDB}?title={film_info.name_film}&user_rating={",".join([str(film_info.rating_start), str(film_info.rating_end)])}&genres={",".join(film_info.genres)}'
 
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
@@ -33,13 +33,13 @@ async def recommend(count_genres: int, login: str) -> list[Film]:
                 dict_genres[el_genr] += 1
 
     sorted_dict_genres = {}
-    sorted_keys = sorted(dict_genres, key=dict_genres.get) # [1, 3, 2]
+    sorted_keys = sorted(dict_genres, key=dict_genres.get) 
     sorted_keys = sorted_keys[::-1]
     for w in sorted_keys:
         sorted_dict_genres[w] = dict_genres[w]
 
     list_genres_query = []
-    if count_genres <= len(list(sorted_dict_genres.keys())):
+    if count_genres <= len(set(sorted_dict_genres.keys())):
         for i in range(count_genres):
             list_genres_query.append(list(sorted_dict_genres.keys())[i])
     else:

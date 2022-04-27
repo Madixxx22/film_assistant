@@ -10,30 +10,9 @@ ALGORITHM = environ.get("ALGORITHM")
 API_KEY_IMDB = environ.get("API_KEY_IMDB")
 
 GENRES = ["action", "adventure", "animation", "biography", "comedy", "crime", "documentary",
-            "drama", "family", "fantasy", "film-Noir", "game-Show", "history", "horror", "music",
-            "musical", "mystery", "news", "reality-TV", "romance", "sci-fi", "sport", "talk-Show",
+            "drama", "family", "fantasy", "film-noir", "game-show", "history", "horror", "music",
+            "musical", "mystery", "news", "reality-tv", "romance", "sci-fi", "sport", "talk-show",
             "thriller", "war", "western", "short"]
 
 DATABASE_URL = (f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:5432/{DB_NAME}")
 
-DESCRIPTION_APP = """
-In the application, you can add movies to favorites, then, based on similar genres, you will be recommended movies that you may like. All information is obtained using the IMDB API.
-
-## Users
-
-You will be able to:
-
-* **Create users**
-* **Delete users**
-* **Read and update profile**
-* **Recover password**
-
-## Film
-
-You will be able to:
-
-* **Search film**
-* **Adding movies to favorites**
-* **Read and clear earch history**
-* **Read films by recommendation**
-"""

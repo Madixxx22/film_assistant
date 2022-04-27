@@ -30,7 +30,7 @@ def test_delete_selected_films():
     with TestClient(app) as client:
         token_response = client.post("/log-in", data=token_data)
         token = token_response.json()["access_token"]
-        response = client.delete("/delete-selected-films?id_film=1", headers={"Authorization": f"Bearer {token}"})
+        response = client.delete("/selected-films/delete-selected-films?id_film=1", headers={"Authorization": f"Bearer {token}"})
 
     assert response.status_code == 200
 

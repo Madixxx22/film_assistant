@@ -13,7 +13,7 @@ class FilmCRUD():
                 search_film_history.c.login == current_user.login).order_by(sqlalchemy.desc(search_film_history.c.id_search))
         return await database.fetch_one(query)
 
-    async def get_history_search(self, current_user: User) -> list[FilmSearch]:
+    async def get_history_search(self, current_user: User) -> list:
         query = search_film_history.select().where(search_film_history.c.login == current_user.login).order_by(
             sqlalchemy.desc(search_film_history.c.id_search)).limit(10)
         return await database.fetch_all(query)
