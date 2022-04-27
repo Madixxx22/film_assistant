@@ -79,9 +79,7 @@ async def profile_user(current_user: UsersAuth = Depends(get_current_active_user
     profile = await user_crud.get_user_profile(login = current_user.login)
     if not profile:
         raise HTTPException(status_code = 400, detail="profile does not exist")
-    if not await user_crud.is_active(profile):
-        raise HTTPException(status_code = 400, detail="profile is not active")
-
+    
     return profile
 
 @router.put("/profile-user/update-profile-user", status_code = status.HTTP_200_OK)
@@ -92,9 +90,6 @@ async def update_profile_user(last_name: str, first_name: str, current_user:User
     - **first_name**: User name
     - **last_name**: User's last name
     """
-
-    if not await user_crud.is_active(current_user):
-        raise HTTPException(status_code = 400, detail="profile is not active")
 
     return await user_crud.update_user_profile(last_name, first_name, current_user)
 

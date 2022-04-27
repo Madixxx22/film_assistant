@@ -9,6 +9,7 @@ class UserBase(BaseModel):
 class Password(BaseModel):
     password: str
     password_verification: str
+    #checking for matching passwords
     @validator("password_verification")
     def password_match(cls, v, values):
         if "password" in values and v != values["password"]:

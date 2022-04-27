@@ -31,6 +31,7 @@ class FilmCRUD():
                 genres = film_search.genres, rating_start = film_search.rating_start, rating_end = film_search.rating_end)
         return await database.execute(query)
     
+    #Records movies in the database on the history of queries with a limit of 5
     async def create_film_history_by_search(self, id_search: int, films: Film):
         if len(films) <= 5:
             for i in range(len(films)):
