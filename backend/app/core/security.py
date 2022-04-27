@@ -8,9 +8,11 @@ from .config import SECRET_KEY, ALGORITHM
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="log-in")
 
+#Hashes the user's password
 def get_hash_password(password):
     return pwd_context.hash(password)
 
+#Creates a jwt authorization token
 def create_access_token(data: dict, expires_delta: timedelta | None = None): 
     to_encode = data.copy()
     if expires_delta:

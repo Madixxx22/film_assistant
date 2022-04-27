@@ -5,6 +5,7 @@ from app.core.config import GENRES
 class FilmBase(BaseModel):
     name_film: str = ""
     genres: list[str] = [""]
+    #Checking for the correctness of genres
     @validator("genres")
     def genres_validate(cls, genres):
         for i in genres:

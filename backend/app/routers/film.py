@@ -22,9 +22,7 @@ async def add_film_selected(film_select: Film = Body(..., example = ExampleSchem
 
     Returns the id of the added film in the database
     """
-    if not await user_crud.is_active(current_user):
-        raise HTTPException(status_code=400, detail="profile is not active")
-
+    
     return await film_crud.create_film_selected(login = current_user.login, film = film_select)
 
 
@@ -48,9 +46,7 @@ async def film_search(film_info: FilmSearch = Body(..., example = ExampleSchemes
     - **rating**: Rating of the film on IMDB 
     - **img_link**: link to the film poster from IMDB
     """    
-    if not await user_crud.is_active(current_user):
-        raise HTTPException(status_code = 400, detail="profile is not active")
-
+    
     await film_crud.create_search_film(film_info, current_user)
 
     id_search = await film_crud.get_id_search_film(current_user)
@@ -78,9 +74,7 @@ async def search_film_history(current_user: User = Depends(get_current_active_us
     - **rating_start**: Choosing a rating range from
     - **rating_end**: Selecting a rating range up to
     """     
-    if not await user_crud.is_active(current_user):
-        raise HTTPException(status_code = 400, detail="profile is not active")
-
+    
     return await film_crud.get_history_search(current_user)
 
 @router.get("/history-search/film-history-by-search", response_model = list[FilmHistory], status_code = status.HTTP_200_OK, responses =  {200: { 
@@ -102,9 +96,7 @@ async def film_history_by_search(id_search: int, current_user: User = Depends(ge
     - **rating**: Rating of the film on IMDB 
     - **img_link**: link to the movie poster from IMDB
     """     
-    if not await user_crud.is_active(current_user):
-        raise HTTPException(status_code = 400, detail="profile is not active")
-
+    
     try:
         response = await film_crud.get_history_film_by_search(id_search)
     except:
@@ -129,8 +121,6 @@ async def view_selected_films(current_user: User =  Depends(get_current_active_u
     - **rating**: Rating of the film on IMDB 
     - **img_link**: link to the movie poster from IMDB
     """     
-    if not await user_crud.is_active(current_user):
-        raise HTTPException(status_code = 400, detail="profile is not active")
 
     return await film_crud.get_selected_films(current_user.login)
 
@@ -153,9 +143,6 @@ async def recommendations(count_genres: int = 3, current_user: User =  Depends(g
     - **rating**: Rating of the film on IMDB 
     - **img_link**: link to the movie poster from IMDB
     """ 
-    
-    if not await user_crud.is_active(current_user):
-        raise HTTPException(status_code = 400, detail="profile is not active")
 
     return await recommend(count_genres, current_user.login)
 
@@ -164,9 +151,6 @@ async def clear_history_search(current_user: User =  Depends(get_current_active_
     """ 
     Clearing the entire query history(only authorized users) 
     """     
-    
-    if not await user_crud.is_active(current_user):
-        raise HTTPException(status_code = 400, detail="profile is not active")
 
     return await film_crud.delete_history_search(current_user.login)
 
@@ -177,9 +161,6 @@ async def delete_selected_film(id_film: int, current_user: User =  Depends(get_c
 
     - **id_film**: id of the selected movie in the database 
     """     
-    if not await user_crud.is_active(current_user):
-        raise HTTPException(status_code = 400, detail="profile is not active")
-
     try:
         response = await film_crud.delete_selected_film(id_film = id_film, login = current_user.login)
     except:
